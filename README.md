@@ -8,10 +8,15 @@
 /search -> Search
 
 /users/edit -> Edit user
+/users/:id -> See User
+/users/logout  
+/users/edit -> Edit My profile
 /users/delete -> Delet user
 
 /videos/watch -> Watch video
-/videos/edit -> Edit video
+=> /videos/:id -> id에 해당하는 동영상을 볼 거.
+/videos/:id/edit -> Edit Video
+/videos/upload -> Upload video
 /videos/delete -> Delete Video
 
 /videos/comments/ -> Comment on a video
