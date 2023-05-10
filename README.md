@@ -8,7 +8,7 @@
 /search -> Search
 
 /users/edit -> Edit user
-/users/:id -> See User
+/users/:id -> See User(See My profile)
 /users/logout  
 /users/edit -> Edit My profile
 /users/delete -> Delet user
