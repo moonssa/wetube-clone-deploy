@@ -1,66 +1,43 @@
-// const videos = [1, 2, 3, 4, 5, 6];
-let videos = [
-  {
-    title: "First Video",
-    rating: 5,
-    comments: 2,
-    createdAt: "2 minutes ago",
-    views: 59,
-    id: 1,
-  },
-  {
-    title: "Second Video",
-    rating: 5,
-    comments: "excellent",
-    createdAt: "2 minutes ago",
-    views: 1,
-    id: 2,
-  },
-  {
-    title: "Third Video",
-    rating: 5,
-    comments: "nice",
-    createdAt: "3 minutes ago",
-    views: 3,
-    id: 3,
-  },
-];
-export const handleHome = (req, res) => {
+import Video from "../models/Video";
+
+export const handleHome = async (req, res) => {
+  const videos = await Video.find({});
   return res.render("home", { pageTitle: "Home", videos });
 };
+
 export const handleWatchVideo = (req, res) => {
   const { id } = req.params;
-  const video = videos[id - 1];
-  return res.render("watch", { pageTitle: `Watching ${video.title}`, video });
+
+  return res.render("watch", { pageTitle: `Watching ` });
 };
 
 export const getEdit = (req, res) => {
   const { id } = req.params;
-  const video = videos[id - 1];
-  return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
+
+  return res.render("edit", { pageTitle: `Edit:` });
 };
 export const postEdit = (req, res) => {
   const { id } = req.params;
-  videos[id - 1].title = req.body.title;
   return res.redirect(`/videos/${id}`);
 };
+
 export const getUpload = (req, res) => {
   return res.render("upload", { pageTitle: "Upload Video" });
 };
 
-export const postUpload = (req, res) => {
-  console.log(req.body);
-  const id = videos.length + 1;
-  console.log(id);
-  const { title, rating, comments } = req.body;
-  const newVideo = {
-    id: id,
+export const postUpload = async (req, res) => {
+  const { title, description, hashtags } = req.body;
+  console.log(title, description, hashtags);
+  await Video.create({
     title,
-    rating,
-    comments,
-    createdAt: "now",
-  };
-  videos.push(newVideo);
+    description,
+    createdAt: Date.now(),
+    hashtags: hashtags.split(",").map((word) => `#${word}`),
+    meta: {
+      views: 0,
+      rating: 0,
+    },
+  });
   return res.redirect("/");
 };
 export const handleSearch = (req, res) => res.send("Search Video");

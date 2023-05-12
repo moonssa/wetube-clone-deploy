@@ -3,6 +3,6 @@ extends base
 block content 
 	form(method="POST")
 		input(name="title", placeholder="Title", required, type="text")
-		input(name="rating",placeholder="rating")
-		input(name="comments", placeholder="comments")
+		input(name="description",placeholder="Description", required, type="text")
+		input(name="hashtags", placeholder="Hashtags, seperated by comma.", required, type="text")
 		input(value="Upload Video", type="submit")
