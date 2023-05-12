@@ -1,14 +1,14 @@
 import Video from "../models/Video";
 
-export const handleHome = async (req, res) => {
+export const home = async (req, res) => {
   const videos = await Video.find({});
   return res.render("home", { pageTitle: "Home", videos });
 };
 
-export const handleWatchVideo = (req, res) => {
+export const handleWatchVideo = async (req, res) => {
   const { id } = req.params;
-
-  return res.render("watch", { pageTitle: `Watching ` });
+  const video = await Video.findById(id);
+  return res.render("watch", { pageTitle: video.title, video });
 };
 
 export const getEdit = (req, res) => {
@@ -28,16 +28,23 @@ export const getUpload = (req, res) => {
 export const postUpload = async (req, res) => {
   const { title, description, hashtags } = req.body;
   console.log(title, description, hashtags);
-  await Video.create({
-    title,
-    description,
-    createdAt: Date.now(),
-    hashtags: hashtags.split(",").map((word) => `#${word}`),
-    meta: {
-      views: 0,
-      rating: 0,
-    },
-  });
+  try {
+    await Video.create({
+      title,
+      description,
+      hashtags: hashtags.split(",").map((word) => `#${word}`),
+      meta: {
+        views: 0,
+        rating: 0,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return res.render("upload", {
+      pageTitle: "Upload Video",
+      errorMessage: error._message,
+    });
+  }
   return res.redirect("/");
 };
 export const handleSearch = (req, res) => res.send("Search Video");
