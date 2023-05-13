@@ -22,6 +22,7 @@ export const getEdit = async (req, res) => {
   }
   return res.render("edit", { pageTitle: `Edit`, video });
 };
+
 export const postEdit = async (req, res) => {
   const { id } = req.params;
   const { title, description, hashtags } = req.body;
@@ -30,6 +31,7 @@ export const postEdit = async (req, res) => {
   if (!video) {
     return res.render("404", { pageTitle: "Video not found!" });
   }
+  console.log("hasgtages", hashtags);
   await Video.findByIdAndUpdate(id, {
     title,
     description,
@@ -52,9 +54,7 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title,
       description,
-      hashtags: hashtags
-        .split(",")
-        .map((word) => (word.startsWith("#") ? word : `#${word}`)),
+      hashtags,
       meta: {
         views: 0,
         rating: 0,
