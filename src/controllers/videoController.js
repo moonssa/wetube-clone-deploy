@@ -35,9 +35,7 @@ export const postEdit = async (req, res) => {
   await Video.findByIdAndUpdate(id, {
     title,
     description,
-    hashtags: hashtags
-      .split(",")
-      .map((word) => (word.startsWith("#") ? word : `#${word}`)),
+    hashtags: Video.formatHashtags(hashtags),
   });
 
   return res.redirect(`/videos/${id}`);
@@ -54,12 +52,9 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title,
       description,
-      hashtags,
-      meta: {
-        views: 0,
-        rating: 0,
-      },
+      hashtags: Video.formatHashtags(hashtags),
     });
+    return res.redirect("/");
   } catch (error) {
     console.log(error);
     return res.render("upload", {
@@ -67,7 +62,6 @@ export const postUpload = async (req, res) => {
       errorMessage: error._message,
     });
   }
-  return res.redirect("/");
 };
 export const handleSearch = (req, res) => res.send("Search Video");
 export const handleUploadVideo = (req, res) => res.send("Upload Video");
