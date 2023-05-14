@@ -5,6 +5,7 @@ html(lang="ko")
     link(rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css")
   body
     header
+      h1=pageTitle
       nav 
         ul 
           li 
@@ -17,8 +18,6 @@ html(lang="ko")
             a(href="/join") Sign up
           li 
             a(href="/videos/upload") Upload
-
-      h1=pageTitle
     main 
       block content
   include partials/footer

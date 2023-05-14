@@ -1,5 +1,32 @@
-export const handleJoin = (req, res) => res.send("Join Our Home Page");
-export const handleLogin = (req, res) => res.send("Handle Login");
+import User from "../models/User";
+
+export const getJoin = (req, res) => {
+  res.render("join", { pageTitle: "Create Account" });
+};
+
+export const postJoin = async (req, res) => {
+  console.log(req.body);
+  const { name, username, email, password, location } = req.body;
+  try {
+    await User.create({
+      name,
+      username,
+      email,
+      password,
+      location,
+    });
+    return res.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    return res.render("join", {
+      pageTitle: "Create Account",
+      errorMessage: error._message,
+    });
+  }
+
+  return res.redirect("/");
+};
+export const login = (req, res) => res.send("Handle Login");
 export const handleEditUser = (req, res) => res.send("Edit User");
 export const handleDeleteUser = (req, res) => res.send("Delete User");
 
