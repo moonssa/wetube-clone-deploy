@@ -60,6 +60,9 @@ export const postLogin = async (req, res) => {
       errorMessage: "password does not matched!",
     });
   }
+  req.session.loggedIn = true;
+  req.session.user = user;
+
   return res.redirect("/");
 };
 

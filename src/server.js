@@ -5,6 +5,7 @@ import morgan from "morgan";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import { localMiddleware } from "./middlewares";
 
 const app = express();
 const logger = morgan("dev");
@@ -29,10 +30,7 @@ app.use((req, res, next) => {
   });
 });
 
-app.get("/add-one", (req, res) => {
-  req.session.potato += 1;
-  return res.send(`${req.session.id} ${req.session.potato}`);
-});
+app.use(localMiddleware);
 
 app.use("/", rootRouter);
 app.use("/users", userRouter);
