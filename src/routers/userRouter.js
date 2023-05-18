@@ -1,15 +1,17 @@
 import express from "express";
 import {
-  handleEditUser,
-  handleDeleteUser,
   seeProfile,
-  handleLogout,
+  startGithubLogin,
+  finishGithubLogin,
+  logout,
+  edit,
 } from "../controllers/userController";
 const userRouter = express.Router();
 
-userRouter.get("/logout", handleLogout);
-userRouter.get("/edit", handleEditUser);
-userRouter.get("/delete", handleDeleteUser);
+userRouter.get("/logout", logout);
+userRouter.get("/edit", edit);
+userRouter.get("/github/start", startGithubLogin);
+userRouter.get("/github/finish", finishGithubLogin);
 userRouter.get("/:id(\\d+)", seeProfile);
 
 export default userRouter;

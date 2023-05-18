@@ -21,9 +21,9 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      maxAge: 2000,
-    },
+    // cookie: {
+    //   maxAge: 2000,
+    // },
     store: MongoStore.create({
       mongoUrl: process.env.DB_URL,
     }),
