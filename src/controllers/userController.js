@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fetch from "cross-fetch";
 import bcrypt from "bcrypt";
+import { bootstrapAnalyticsAsync } from "expo-cli";
 
 export const getJoin = (req, res) => {
   res.render("join", { pageTitle: "Create Account" });
@@ -142,6 +143,7 @@ export const finishGithubLogin = async (req, res) => {
         username: userData.login,
         email: emailObj.email,
         password: "",
+        avatarUrl: userData.avatar_url,
         socialOnly: true,
         location: userData.location,
       });
@@ -159,6 +161,39 @@ export const logout = (req, res) => {
   return res.redirect("/");
 };
 
-export const edit = (req, res) => res.send("Edit User");
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+
+  console.log("location", location);
+
+  // await User.findByIdAndUpdate(_id, { name, email, username, location });
+
+  // req.session.user = {
+  //   ...req.session.user,
+  //   name,
+  //   email,
+  //   username,
+  //   location,
+  // };
+
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { name, email, username, location },
+    { new: true },
+  );
+
+  req.session.user = updatedUser;
+
+  return res.redirect("/users/edit");
+};
 
 export const seeProfile = (req, res) => res.send("My profile");
