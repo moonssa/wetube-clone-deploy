@@ -1,7 +1,6 @@
 import User from "../models/User";
 import fetch from "cross-fetch";
 import bcrypt from "bcrypt";
-import { bootstrapAnalyticsAsync } from "expo-cli";
 
 export const getJoin = (req, res) => {
   res.render("users/join", { pageTitle: "Create Account" });
@@ -203,7 +202,18 @@ export const postEdit = async (req, res) => {
   return res.redirect("/users/edit");
 };
 
-export const seeProfile = (req, res) => res.send("My profile");
+export const seeProfile = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+
+  if (!user) {
+    return res.status(400).render("404", { pageTitle: "User not found" });
+  }
+  return res.render("users/profile", {
+    pageTitle: `${user.name}의 Profile`,
+    user,
+  });
+};
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly) return res.redirect("/");
