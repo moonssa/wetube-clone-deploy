@@ -35,6 +35,6 @@ export const uploadAvatarFiles = multer({
 export const uploadVideoFiles = multer({
   dest: "uploads/videos",
   limits: {
-    fileSize: 50000000,
+    fileSize: 150000000,
   },
 });
