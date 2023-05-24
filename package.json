@@ -8,8 +8,8 @@
     "url": "git+https://github.com/moonssa/wetube-clone.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/init.js",
-    "assets": "webpack --config webpack.config.js"
+    "dev:server": "nodemon",
+    "dev:assets": "webpack"
   },
   "author": "moon",
   "license": "MIT",
@@ -34,6 +34,7 @@
     "@babel/node": "^7.20.7",
     "@babel/preset-env": "^7.21.5",
     "css-loader": "^6.7.4",
+    "mini-css-extract-plugin": "^2.7.6",
     "nodemon": "^2.0.22",
     "sass": "^1.62.1",
     "sass-loader": "^13.3.0",
