@@ -2,7 +2,9 @@ import User from "../models/User";
 import Video from "../models/Video";
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}).sort({ createdAt: "desc" });
+  const videos = await Video.find({})
+    .sort({ createdAt: "desc" })
+    .populate("owner");
   return res.render("home", { pageTitle: "Home", videos });
 };
 
@@ -114,6 +116,7 @@ export const deleteVideo = async (req, res) => {
   return res.redirect("/");
 };
 
+// search
 export const search = async (req, res) => {
   console.log(req.query);
   let videos = [];
@@ -123,7 +126,9 @@ export const search = async (req, res) => {
       title: {
         $regex: new RegExp(keyword, "i"),
       },
-    });
+    }).populate("owner");
   }
+  if (videos === "") conaole.log("empty");
+
   return res.render("search", { pageTitle: "Search Video", videos });
 };
