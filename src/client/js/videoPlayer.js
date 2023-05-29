@@ -8,7 +8,10 @@ const totalTime = document.getElementById("totalTime");
 const timeline = document.getElementById("timeline");
 const fullScreenBtn = document.getElementById("fullScreen");
 const videoContainer = document.getElementById("videoContainer");
+const videoControls = document.getElementById("videoControls");
 
+let controlsTimeout = null;
+let controlsMovementTimeout = null;
 let volumeValue = 0.5;
 video.volume = volumeValue;
 
@@ -62,6 +65,8 @@ const handleTimelineChange = (event) => {
   video.currentTime = value;
 };
 
+// Full Screen
+
 const handleFullScreen = () => {
   const fullscreen = document.fullscreenElement;
   if (fullscreen === null) {
@@ -73,6 +78,25 @@ const handleFullScreen = () => {
   }
 };
 
+const hideControls = () => videoControls.classList.remove("showing");
+const handleMouseMove = () => {
+  if (controlsTimeout) {
+    clearTimeout(controlsTimeout);
+    controlsTimeout = null;
+  }
+  if (controlsMovementTimeout) {
+    clearTimeout(controlsMovementTimeout);
+    controlsMovementTimeout = null;
+  }
+  videoControls.classList.add("showing");
+  // mouse가 움직이는거 시간 카운트 ( 콘트롤바 숨기기 위해)
+  controlsMovementTimeout = setTimeout(hideControls, 3000);
+};
+const handleMouseLeave = () => {
+  // 3초 후에 컨트롤러를 숨겨주기 위해
+  controlsTimeout = setTimeout(hideControls, 3000);
+};
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolumeChange);
@@ -81,3 +105,6 @@ video.addEventListener("timeupdate", handleTimeUpdate);
 
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullScreen);
+
+video.addEventListener("mousemove", handleMouseMove);
+video.addEventListener("mouseleave", handleMouseLeave);
