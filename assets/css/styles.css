@@ -272,6 +272,49 @@ input[type=submit],
   color: azure;
 }
 
+#videoContainer {
+  width: 100%;
+  position: relative;
+}
+#videoContainer video {
+  width: 100%;
+}
+#videoContainer i {
+  font-size: 20px;
+}
+#videoContainer .videoControls {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  align-items: center;
+  border-radius: 10px;
+  gap: 10px;
+  position: absolute;
+  bottom: 10px;
+  width: 98%;
+  left: 10px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr auto;
+  background-color: #0f1117;
+  padding: 10px;
+  box-sizing: border-box;
+}
+#videoContainer .videoControls.showing {
+  opacity: 1;
+}
+#videoContainer .videoControls .videoControls__play {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+#videoContainer .videoControls .videoControls__volume {
+  display: flex;
+  align-items: center;
+}
+#videoContainer .videoControls .videoControls__volume span {
+  margin-left: 15px;
+}
+
 .search__form {
   display: flex;
   align-items: center;
