@@ -65,48 +65,41 @@ const handleDownload = async () => {
 };
 
 const handleStart = () => {
-  actionBtn.innerText = "Stop Recording";
+  actionBtn.innerText = "Recording";
+  actionBtn.disabled = true;
   actionBtn.removeEventListener("click", handleStart);
-  actionBtn.addEventListener("click", handleStop);
+
   recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
-  console.log("**** before start", recorder);
 
   // recording이 끝났을때
   recorder.ondataavailable = (e) => {
-    console.log("recorder done");
-    console.log(e);
-    console.log(e.data);
-
     // createObjectURL  은 실제 URL이 아니라 녹화된 동영상이 위치한 메모리의 위치를 포인트 한다.
     videoFile = URL.createObjectURL(e.data);
-    console.log(videoFile);
+
     video.srcObject = null;
     video.src = videoFile;
     video.loop = true;
     video.play();
+    actionBtn.innerText = "Download";
+    actionBtn.disabled = false;
+    actionBtn.addEventListener("click", handleDownload);
   };
 
   recorder.start();
-  console.log("====== after start", recorder);
 
-  // setTimeout(() => {
-  //   recorder.stop();
-  // }, 10000);
-};
-
-const handleStop = () => {
-  actionBtn.innerText = "Download Recording";
-  actionBtn.removeEventListener("click", handleStop);
-  recorder.stop();
-  actionBtn.addEventListener("click", handleDownload);
+  setTimeout(() => {
+    recorder.stop();
+  }, 4000);
 };
 
 const init = async () => {
   stream = await navigator.mediaDevices.getUserMedia({
     audio: false,
-    video: true,
+    video: {
+      width: 1024,
+      height: 576,
+    },
   });
-  console.log(stream);
   video.srcObject = stream;
   video.play();
 };
