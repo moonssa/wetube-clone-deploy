@@ -24,6 +24,10 @@ const handleSubmit = async (event) => {
 
   const text = textarea.value;
   const videoId = videoContainer.dataset.id;
+
+  if (text === "") {
+    return;
+  }
   const response = await fetch(`/api/videos/${videoId}/comment`, {
     method: "POST",
     headers: {
