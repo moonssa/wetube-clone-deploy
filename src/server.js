@@ -1,5 +1,6 @@
 import express from "express";
 import session from "express-session";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 
 import morgan from "morgan";
@@ -16,30 +17,20 @@ app.set("views", process.cwd() + "/src/views");
 
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
-    // cookie: {
-    //   maxAge: 2000,
-    // },
     store: MongoStore.create({
       mongoUrl: process.env.DB_URL,
     }),
   }),
 );
 
-/*
-app.use((req, res, next) => {
-  req.sessionStore.all((error, sessions) => {
-    console.log(sessions);
-    next();
-  });
-});
-*/
-
+app.use(flash());
 app.use(localMiddleware);
 
 app.use((req, res, next) => {
@@ -48,11 +39,12 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("assets"));
+
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
-app.use("/uploads", express.static("uploads"));
-app.use("/static", express.static("assets"));
 app.use("/api", apiRouter);
 
 export default app;

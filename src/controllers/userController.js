@@ -3,12 +3,10 @@ import fetch from "cross-fetch";
 import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => {
-  res.render("join", { pageTitle: "Create Account" });
+  return res.render("join", { pageTitle: "Create Account" });
 };
 
 export const postJoin = async (req, res) => {
-  console.log(req.body);
-
   const { name, username, email, password, password2, location } = req.body;
 
   if (password !== password2) {
@@ -156,7 +154,13 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  req.session.destroy();
+  //req.session.destroy();
+  req.session.user = null;
+  req.session.loggedIn = false;
+  res.locals.loggedInUser = req.session.user;
+
+  console.log("!!!logoutlogout", res.locals);
+  console.log("&&&logoutlogout");
   return res.redirect("/");
 };
 
@@ -255,6 +259,6 @@ export const postChangePassword = async (req, res) => {
 
   user.password = newPassword;
   await user.save();
-
+  req.flash("info", "Passwprd updated");
   return res.redirect("/users/logout");
 };
