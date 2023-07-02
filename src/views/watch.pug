@@ -25,8 +25,8 @@ block content
 			a(href=`/users/${video.owner._id}`)=video.owner.name
 		small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
 		if String(video.owner._id) === String(loggedInUser._id)
-			a(href=`${video.id}/edit`) Edit Video &rarr;
 			br
+			a(href=`${video.id}/edit`) Edit Video &rarr;
 			a(href=`${video.id}/delete`) Delete Video &rarr;
 	if loggedIn
 		div.video__add-comments 
@@ -36,11 +36,11 @@ block content
 	div.video__comments
 		ul 
 			each comment in video.comments.reverse()
-				li.video__comment(data-id=comment.id)
+				li#deleteComment.video__comment(data-id=comment.id)
 					i.fas.fa-comment 
 					span  #{comment.text}
 					if String(comment.owner._id) === String(loggedInUser._id)
-						span    ❌
+						span#deleteCommentBtn(data-id=comment.id)    ❌
 
 	block scripts 
 	script(src="/static/js/videoPlayer.js")
