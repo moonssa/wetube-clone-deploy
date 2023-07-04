@@ -12,7 +12,7 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id).populate("owner").populate("comments");
- 
+
   if (!video) {
     return res.render("404", { pageTitle: "Video not found !" });
   }
@@ -79,24 +79,21 @@ export const postUpload = async (req, res) => {
 
   const { video, thumb } = req.files;
 
-  
-
   try {
     const newVideo = await Video.create({
       title,
       owner: _id,
-      fileUrl: video[0].path,
-      thumbUrl: thumb[0].path,
+      fileUrl: video[0].location,
+      thumbUrl: thumb[0].location,
       description,
       hashtags: Video.formatHashtags(hashtags),
     });
     const user = await User.findById(_id);
-    
+
     user.videos.push(newVideo._id);
     user.save();
     return res.redirect("/");
   } catch (error) {
-   
     return res.status(400).render("upload", {
       pageTitle: "Upload Video",
       errorMessage: error._message,
@@ -124,7 +121,6 @@ export const deleteVideo = async (req, res) => {
 
 // search
 export const search = async (req, res) => {
-  
   let videos = [];
   const { keyword } = req.query;
   if (keyword) {
@@ -161,7 +157,7 @@ export const createComment = async (req, res) => {
   if (!video) {
     return res.sendStatus(404);
   }
-  
+
   const comment = await Comment.create({
     text,
     owner: user._id,
@@ -174,7 +170,6 @@ export const createComment = async (req, res) => {
 };
 
 export const deleteComment = async (req, res) => {
-
   const id = req.params.id;
   const loginId = req.session.user._id;
 
