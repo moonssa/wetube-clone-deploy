@@ -2,6 +2,8 @@ import User from "../models/User";
 import fetch from "cross-fetch";
 import bcrypt from "bcrypt";
 
+const isHeroku = process.env.NODE_ENV === "production";
+
 export const getJoin = (req, res) => {
   return res.render("join", { pageTitle: "Create Account" });
 };
@@ -158,6 +160,7 @@ export const logout = (req, res) => {
   req.session.user = null;
   req.session.loggedIn = false;
   res.locals.loggedInUser = req.session.user;
+  res.locals.isHeroku = isHeroku;
 
   console.log("!!!logoutlogout", res.locals);
   console.log("&&&logoutlogout");
@@ -193,7 +196,7 @@ export const postEdit = async (req, res) => {
     _id,
     {
       // avatarUrl: file ? file.path : avatarUrl,
-      avatarUrl: file ? file.location : avatarUrl,
+      avatarUrl: file ? (isHeroku ? file.location : file.path) : avatarUrl,
       name,
       email,
       username,
