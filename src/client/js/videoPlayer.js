@@ -59,7 +59,7 @@ const handleVolumeChange = (event) => {
 };
 
 const formatTime = (seconds) =>
-  new Date(seconds * 1000).toISOString().substr(14, 5);
+  new Date(seconds * 1000).toISOString().substring(15, 19);
 
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
@@ -115,7 +115,11 @@ const handleEnded = () => {
     method: "POST",
   });
 };
-
+const handlePlayKeyup = (event) => {
+  if (event.keyCode === "Space") {
+    handlePlayClick();
+  }
+};
 console.log(videoContainer.dataset);
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -130,3 +134,10 @@ fullScreenBtn.addEventListener("click", handleFullScreen);
 
 video.addEventListener("mousemove", handleMouseMove);
 video.addEventListener("mouseleave", handleMouseLeave);
+
+document.addEventListener("keyup", handlePlayKeyup);
+document.addEventListener("fullscreenchange", handleExitFullscreen);
+
+if (video.readyState > 2) {
+  handleLoadedMetadata();
+}
